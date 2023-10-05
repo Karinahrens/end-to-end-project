@@ -35,12 +35,28 @@ class Country {
         return new Country(response.rows[0]);
     }
 
-    // async destroy() {
-    //     let response = await db.query("DELETE FROM country WHERE country_id = $1 RETURNING *;", [this.id]);
+    // async update() {
+    //     const { name, capital, population, languages  } = data;
+    //     const checkQuery = await db.query('SELECT * FROM country WHERE name = $1');
+
+    //     let response = await db.query("UPDATE country SET capital = COALESCE($2, capital), population = COALESCE($3, population),languages = COALESCE($4, languages) WHERE name = $1 RETURNING *", [name, capital, population, languages]);
     //     return new Country(response.rows[0]);
     // }
 
-}
+    async update(data) {
+        const response = await db.query("UPDATE country SET capital = $1 WHERE name = $2 RETURNING name, capital;",
+            [ data.capital, this.name ]);
+        if (response.rows.length != 1) {
+            throw new Error("Unable to update capital.")
+        }
+        return new Country(response.rows[0]);
+    }
+    
+    async destroy() {
+        let response = await db.query("DELETE FROM country WHERE name = $1 RETURNING *;", [this.name]);
+        return new Country(response.rows[0]);
+
+}}
 
 module.exports = Country;
 

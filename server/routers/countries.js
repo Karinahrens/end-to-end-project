@@ -7,6 +7,7 @@ const countryRouter = Router();
 countryRouter.get("/", countryController.index);
 countryRouter.post("/", countryController.create);
 countryRouter.get("/:name", countryController.show);
-// countryRouter.delete("/:id", countryController.destroy);
+countryRouter.update("/:name", countryController.update);
+countryRouter.delete("/:name", countryController.destroy);
 
 module.exports = countryRouter;
